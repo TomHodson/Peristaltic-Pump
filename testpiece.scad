@@ -1,8 +1,9 @@
 use <peristalsic.scad>
 
+projection(cut = true) {
 difference() {
 
-	cube(h = 5, l = 20, w = 30); 
+	cube([10,60,5], center = true); 
 
 	union() {
 
@@ -14,4 +15,5 @@ difference() {
 			echo("diam", i, 7*scale);
 		}
 	}
+}
 }

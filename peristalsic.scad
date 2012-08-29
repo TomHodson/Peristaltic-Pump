@@ -1,5 +1,5 @@
-use <MCAD/involute_gears.scad>;
-use <MCAD/bearing.scad>
+//use <involute_gears.scad>;
+//use <MCAD/bearing.scad>;
 
 $fn =20;
 cyc = (1 + sin($t*360))/2;
