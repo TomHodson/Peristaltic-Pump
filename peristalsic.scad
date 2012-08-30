@@ -53,7 +53,7 @@ spin = 0;
 materialcolor = [0,0.5,0,0.8];
 tile = (max(biggearR*2, loopD + wallwidth*2) + lasgap)*spread;//(loopD + wallwidth*2 + lasgap)*spread;
 onlymaterial = false;
-gengears = true;
+gengears = false;
 
 module 608sleeve() {
 color(materialcolor) 
@@ -196,6 +196,7 @@ backlash = backlash,
 roundsize = 0.7
 ); }
 else {
+echo("importing biggear.stl");
 import("biggear.stl");
 }
 }
@@ -230,6 +231,7 @@ translate([0,0,-10]) scale([1,1,20]) motorshaft();
 }
 }
 else {
+echo("importing smallgear.stl");
 import("smallgear.stl");
 }
 }
