@@ -1,6 +1,12 @@
 use <MCAD/involute_gears.scad>;
 use <MCAD/bearing.scad>;
 
+//todo
+//do away with bearing sleeves
+//round off tube corners
+//check shaft diams are right
+//print out lasercut design
+
 
 $fn =20;
 cyc = (1 + sin($t*360))/2;
@@ -47,22 +53,16 @@ biggearR = (bigteeth * circular_pitch / 180) / 2;
 
 
 lasgap = 2;
-spread = 0;//1 - ((cyc) * (cyc));
-explode = 10;//1 + (cyc) * 10;
-spin = 0;
+spread = 1;//1 - ((cyc) * (cyc));
+explode = 0;//1 + (cyc) * 10;
+spin = 1;
 materialcolor = [0,0.5,0,0.8];
 tile = (max(biggearR*2, loopD + wallwidth*2) + lasgap)*spread;//(loopD + wallwidth*2 + lasgap)*spread;
-onlymaterial = false;
+onlymaterial = true;
 gengears = false;
 
 module 608sleeve() {
-color(materialcolor) 
-difference() {
-cylinder(h = bearingwidth, r = bearingrad+sleeve);
-translate([0,0,-1]) cylinder(h = bearingwidth + 2, r = bearingrad);
-}
-if(onlymaterial == false)
-bearing();
+	bearing();
 }
 
 module _loopoftube() {
@@ -102,15 +102,28 @@ cylinder(r = tubeOD/2, h = loopD/2);
 }
 
 module shaft() {
-translate([0,0,-shaftlen/2]) color([0.5,0.5,0.5,0.6]) cylinder(r = shaftR, h = shaftlen, $fn = 6);
+	translate([0,0,-shaftlen/2]) color([0.5,0.5,0.5,0.6]) cylinder(r = shaftR, h = shaftlen, $fn = 6);
+}
+
+module bearingshafts() {
+	color([0.5,0.5,0.5,0.6])
+	union() {
+			translate([-((loopD - tubeOD)/2 - bearingrad),0,0]) cylinder(r = shaftR, h =  bearingwidth + 2 * materialwidth);
+			translate([(loopD - tubeOD)/2 - bearingrad,0,0]) cylinder(r = shaftR, h =  bearingwidth + 2 * materialwidth);
+	}
 }
 
 module remshaft() {
-difference() {child(0); scale([1,1,10]) shaft();}
+	difference() {child(0); scale([1,1,10]) shaft();}
+}
+
+module rembearingshafts() {
+	difference() {child(0); scale([1,1,10]) bearingshafts();}
 }
 
 module arm() {
-	color(materialcolor) 
+color(materialcolor)
+rembearingshafts() 
 remshaft()
 	linear_extrude(height=materialwidth) hull() {
 		translate([-((loopD - tubeOD)/2 - bearingrad),0,0]) circle(armwidth);
@@ -211,7 +224,7 @@ child(0);
 
 module smallgear() {
 translate([0,geardist*(1-spread),0]) 
-rotate([0,0,-360 * $t * 2 * spin * gearratio + (360/bigteeth*0)])
+rotate([0,0,360 * $t * 2 * spin * gearratio + (360/bigteeth*0)])
 if(gengears) {
 difference() {
 
@@ -227,7 +240,7 @@ backlash = backlash,
 bore_diameter=0,
 roundsize = 1
 );
-translate([0,0,-10]) scale([1,1,20]) motorshaft();
+translate([0,0,-10]) scale([1,1 - 0.03,20]) motorshaft();
 }
 }
 else {
@@ -301,7 +314,7 @@ union() {
 
 
 translate([tile*-2,tile*0,(-materialwidth * 3) * explode])
-rotate([0,0,360 * $t * 2 * spin])
+rotate([0,0,-360 * $t * 2 * spin])
 biggear();
 
 translate([tile*-0,tile*-0,(-materialwidth * 3) * explode])
@@ -318,7 +331,7 @@ arm();
 translate([tile*-1,0,(-materialwidth * 1) * explode])
 loopspacerring();
 
-translate([tile*0,tile*-1,(-materialwidth*0)*explode])
+#translate([tile*0,tile*0,(-materialwidth*0)*explode])
 loopsupportring();
 
 translate([tile*0,tile*-1,(materialwidth)*explode])
@@ -336,22 +349,26 @@ translate([tile*1,tile*-1,(materialwidth * 3) * explode])
 rotate([0,0,-180*spread])
 frontplate();
 
-
-translate([tile*-0,tile*-1,0])
-rotate([0,0,360 * $t * 2 * spin])
-translate([(loopD - tubeOD)/2 - bearingrad - (5 * spread) ,0,0])
-608sleeve();
-
-translate([tile*-0,tile*-1,0])
-rotate([0,0,360 * $t * 2 * spin])
-translate([-(loopD - tubeOD)/2 + bearingrad + (5 * spread),0,0])
-608sleeve();
-
 if(onlymaterial == false) {
+
+
+translate([tile*-0,tile*-0,0])
+rotate([0,0,360 * $t * 2 * spin])
+translate([(loopD - tubeOD)/2 - bearingrad - sleeve - (5 * spread) ,0,0])
+608sleeve();
+
+translate([tile*-0,tile*-0,0])
+rotate([0,0,360 * $t * 2 * spin])
+translate([-(loopD - tubeOD)/2 + bearingrad + sleeve + (5 * spread),0,0])
+608sleeve();
 
 translate([tile*-0,tile*-0,0])
 rotate([0,0,360 * $t * 2 * spin])
 shaft(); 
+
+translate([tile*-0,tile*-0,0])
+rotate([0,0,360 * $t * 2 * spin])
+bearingshafts()
 
 translate([tile*-1,tile*1,0])
 motor();
