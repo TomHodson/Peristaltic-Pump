@@ -8,7 +8,7 @@ use <../MCAD/bearing.scad>;
 //print out lasercut design
 
 
-$fn =20;
+$fn =10;
 cyc = (1 + sin($t*360))/2;
 echo(cyc);
 
