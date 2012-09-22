@@ -3,37 +3,37 @@
 ##
 ## The data below is left as an example.  Please change each entry to match your requirements. 
 ## 
-
+source: template
 ## Uses distinct namespace. Jekyll settings should go at the root level.
 githubiverse:
     ## Metadata
-    title: "Mechanical Movement #27"
-    author: Gary Hodgson
-    license: GPL3
-    tags: [mechanical movement, fun]
+    title: "Peristaltic Pump"
+    author: Tom Hodson
+    license: BSD
+    tags: [OpenSCAD, Peristaltic, pump, lasercut]
 
     ## Github project parameters.
     github:
         base: https://github.com/
-        user: garyhodgson
-        repository: githubiverse-tst
+        user: tomhodson
+        repository: Peristaltic-pump
         branch: master
 
     ## The names of directories where any images, source and stl files associated with the project can be found.
-    img_dir: img
+    img_dir: vis.back
     stl_dir: stl
     src_dir: src
 
     ## The headline image
-    lead_image: test-jig.jpg
-    show_lead_image: true
+    lead_image: explode.gif
+    show_lead_image: false
 
     ## Optional. When uncommented appends the content of the file defined here to the project description.  Any text in index.md, after the yaml header, will be shown first.
     ## WARNING: since the github outage on 12th Sep. this feature does not currently work.
     description_file: README.md
 
     ## Preview the first STL in the list when the page loads.
-    autoload_stl: true
+    autoload_stl: false
 
     ## Show a github "fork me" ribbon in the top righthand corner of the page.
     show_forkme_ribbon: true
