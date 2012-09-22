@@ -1,5 +1,5 @@
-use <MCAD/involute_gears.scad>;
-use <MCAD/bearing.scad>;
+use <../MCAD/involute_gears.scad>;
+use <../MCAD/bearing.scad>;
 
 //todo
 //do away with bearing sleeves
@@ -58,7 +58,7 @@ explode = 0;//1 + (cyc) * 10;
 spin = 1;
 materialcolor = [0,0.5,0,0.8];
 tile = (max(biggearR*2, loopD + wallwidth*2) + lasgap)*spread;//(loopD + wallwidth*2 + lasgap)*spread;
-onlymaterial = true;
+onlymaterial = false;
 gengears = false;
 
 module 608sleeve() {
@@ -210,7 +210,7 @@ roundsize = 0.7
 ); }
 else {
 echo("importing biggear.stl");
-import("biggear.stl");
+import("../stl/biggear.stl");
 }
 }
 
@@ -245,7 +245,7 @@ translate([0,0,-10]) scale([1,1 - 0.03,20]) motorshaft();
 }
 else {
 echo("importing smallgear.stl");
-import("smallgear.stl");
+import("../stl/smallgear.stl");
 }
 }
 
@@ -352,21 +352,21 @@ frontplate();
 if(onlymaterial == false) {
 
 
-translate([tile*-0,tile*-0,0])
+translate([tile*-0,tile*-1,0])
 rotate([0,0,360 * $t * 2 * spin])
 translate([(loopD - tubeOD)/2 - bearingrad - sleeve - (5 * spread) ,0,0])
 608sleeve();
 
-translate([tile*-0,tile*-0,0])
+translate([tile*-0,tile*-1,0])
 rotate([0,0,360 * $t * 2 * spin])
 translate([-(loopD - tubeOD)/2 + bearingrad + sleeve + (5 * spread),0,0])
 608sleeve();
 
-translate([tile*-0,tile*-0,0])
+translate([tile*-0,tile*-1,0])
 rotate([0,0,360 * $t * 2 * spin])
 shaft(); 
 
-translate([tile*-0,tile*-0,0])
+translate([tile*-0,tile*-1,0])
 rotate([0,0,360 * $t * 2 * spin])
 bearingshafts()
 
