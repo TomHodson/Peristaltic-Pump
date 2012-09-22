@@ -1,6 +1,4 @@
 [submodule "MCAD"]
 	path = MCAD
 	url = https://github.com/TomHodson/MCAD.git
-[submodule "template"]
-	path = template
-	url = git://github.com/garyhodgson/githubiverse-template.git
+	
