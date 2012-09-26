@@ -6,13 +6,14 @@ use <../MCAD/bearing.scad>;
 //round off tube corners
 //check shaft diams are right
 //print out lasercut design
+//a good shaft diameter is  a little less than 8.817mm corrected for kerf
 
 
 $fn =10;
 cyc = (1 + sin($t*360))/2;
 echo(cyc);
 
-//============= motor vars ==============
+//============= motor vars ==================
 motorlength = 26;
 mround = 5;
 mwidth = 22.3;
@@ -31,7 +32,7 @@ bearingwidth = 7; //height
 bearingrad = 11; //radius
 bearingID = 8; //internal diameter
 
-shaftR = 4; // diameter of the central shaft
+shaftR = 8.817/2.0; // diameter of the central shaft
 shaftlen = 100;
 
 wallwidth = 10; //width of the outer ring
@@ -251,6 +252,7 @@ import("../stl/smallgear.stl");
 
 module motorshaft() {
 color("blue")
+scale([])
 rotate([0,0,-360 * $t * 2 * spin * gearratio + (360/bigteeth)])
 linear_extrude(height = 5)
 	intersection() {

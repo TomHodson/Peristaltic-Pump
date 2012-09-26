@@ -1,6 +1,6 @@
 
-.PHONY: all
-all : laid-out-flat.stl main.stl
+.PHONY: default
+default : laid-out-flat.stl main.stl
 	
 
 laid-out-flat.stl : peristaltic.scad
