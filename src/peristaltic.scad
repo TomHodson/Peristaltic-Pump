@@ -9,7 +9,7 @@ use <../MCAD/bearing.scad>;
 //a good shaft diameter is  a little less than 8.817mm corrected for kerf
 
 
-$fn =10;
+$fn =20;
 cyc = (1 + sin($t*360))/2;
 echo(cyc);
 
@@ -32,7 +32,7 @@ bearingwidth = 7; //height
 bearingrad = 11; //radius
 bearingID = 8; //internal diameter
 
-shaftR = 8.817/2.0; // diameter of the central shaft
+shaftR = 8.817/2.0; // radius of the central shaft
 shaftlen = 100;
 
 wallwidth = 10; //width of the outer ring
@@ -48,19 +48,19 @@ gearratio = bigteeth/smallteeth;
 circular_pitch = (360*geardist) / ((bigteeth) + (smallteeth));
 toothsize = circular_pitch/180;
 echo("tsize",toothsize);
-pressure_angle = 25;
+pressure_angle = 30;
 smallgearR = (smallteeth * circular_pitch / 180) / 2;
 biggearR = (bigteeth * circular_pitch / 180) / 2;
 
 
 lasgap = 2;
-spread = 1;//1 - ((cyc) * (cyc));
-explode = 0;//1 + (cyc) * 10;
+spread = 0;//1 - ((cyc) * (cyc));
+explode = 1;//1 + (cyc) * 10;
 spin = 1;
 materialcolor = [0,0.5,0,0.8];
 tile = (max(biggearR*2, loopD + wallwidth*2) + lasgap)*spread;//(loopD + wallwidth*2 + lasgap)*spread;
 onlymaterial = false;
-gengears = false;
+gengears = true;
 
 module 608sleeve() {
 	bearing();
@@ -225,7 +225,7 @@ child(0);
 
 module smallgear() {
 translate([0,geardist*(1-spread),0]) 
-rotate([0,0,360 * $t * 2 * spin * gearratio + (360/bigteeth*0)])
+rotate([0,0,360 * $t * 2 * spin * gearratio])
 if(gengears) {
 difference() {
 
@@ -239,7 +239,7 @@ rim_thickness = materialwidth,
 hub_thickness = materialwidth,
 backlash = backlash,
 bore_diameter=0,
-roundsize = 1
+roundsize = 1s
 );
 translate([0,0,-10]) scale([1,1 - 0.03,20]) motorshaft();
 }
@@ -250,14 +250,14 @@ import("../stl/smallgear.stl");
 }
 }
 
-module motorshaft() {
+module motorshaft(r = 3.4,width = 4.7) {
 color("blue")
 scale([])
 rotate([0,0,-360 * $t * 2 * spin * gearratio + (360/bigteeth)])
 linear_extrude(height = 5)
 	intersection() {
-		circle(r = 3.5);
-		translate([-5,-(2.5)]) square([10,5]);
+		circle(r = r);
+		translate([-5,-(2.5)]) square([10,width]);
 	}
 }
 
@@ -327,13 +327,13 @@ rotate([0,0,-180*spread])
 backplate();
 
 translate([tile*-1,tile*0,(-materialwidth * 1) * explode])
-rotate([0,0,360 * $t * 2 * spin])
+rotate([0,0,-360 * $t * 2 * spin])
 arm();
 
 translate([tile*-1,0,(-materialwidth * 1) * explode])
 loopspacerring();
 
-#translate([tile*0,tile*0,(-materialwidth*0)*explode])
+translate([tile*0,tile*0,(-materialwidth*0)*explode])
 loopsupportring();
 
 translate([tile*0,tile*-1,(materialwidth)*explode])
@@ -344,7 +344,7 @@ translate([tile,0,(materialwidth*2)*explode])
 loopspacerring();
 
 translate([tile*1,tile*0,(materialwidth * 2) * explode])
-rotate([0,0,360 * $t * 2 * spin])
+rotate([0,0,-360 * $t * 2 * spin])
 arm();
 
 translate([tile*1,tile*-1,(materialwidth * 3) * explode])
@@ -355,22 +355,22 @@ if(onlymaterial == false) {
 
 
 translate([tile*-0,tile*-1,0])
-rotate([0,0,360 * $t * 2 * spin])
+rotate([0,0,-360 * $t * 2 * spin])
 translate([(loopD - tubeOD)/2 - bearingrad - sleeve - (5 * spread) ,0,0])
 608sleeve();
 
 translate([tile*-0,tile*-1,0])
-rotate([0,0,360 * $t * 2 * spin])
+rotate([0,0,-360 * $t * 2 * spin])
 translate([-(loopD - tubeOD)/2 + bearingrad + sleeve + (5 * spread),0,0])
 608sleeve();
 
 translate([tile*-0,tile*-1,0])
-rotate([0,0,360 * $t * 2 * spin])
+rotate([0,0,-360 * $t * 2 * spin])
 shaft(); 
 
 translate([tile*-0,tile*-1,0])
-rotate([0,0,360 * $t * 2 * spin])
-bearingshafts()
+rotate([0,0,-360 * $t * 2 * spin])
+bearingshafts();
 
 translate([tile*-1,tile*1,0])
 motor();

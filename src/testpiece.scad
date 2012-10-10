@@ -1,9 +1,9 @@
 //use <peristalsic.scad>
+gengears = true;
 
-module shaft(r= 8.81) {
+module shaft(r= 8.81/2.0 - 0.2) {
 	translate([0,0,1]) color([0.5,0.5,0.5,0.6]) cylinder(r = r, h = 100, $fn = 6);
 }
-
 
 module motorshaft(r = 3.4,width = 4.7) {
 color("blue")
@@ -16,10 +16,36 @@ linear_extrude(height = 5)
 	}
 }
 
+module smallgear() {
+translate([0,geardist*(1-spread),0]) 
+rotate([0,0,360 * $t * 2 * spin * gearratio])
+if(gengears) {
+difference() {
+
+
+gear(
+number_of_teeth = smallteeth,
+circular_pitch=circular_pitch,
+pressure_angle = pressure_angle,
+gear_thickness = materialwidth,
+rim_thickness = materialwidth,
+hub_thickness = materialwidth,
+backlash = backlash,
+bore_diameter=0,
+roundsize = 1s
+);
+translate([0,0,-10]) scale([1,1 - 0.03,20]) motorshaft();
+}
+}
+else {
+echo("importing smallgear.stl");
+import("../stl/smallgear.stl");
+}
+}
+
 projection(cut = true)
 union() {
-	motorshaft();
-	translate([20,0,-2]) shaft();
+	translate([32,0,0]) smallgear();
 }
 
 // projection(cut = true)
