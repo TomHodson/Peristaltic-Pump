@@ -54,7 +54,7 @@ biggearR = (bigteeth * circular_pitch / 180) / 2;
 
 
 lasgap = 2;
-spread = 0;//1 - ((cyc) * (cyc));
+spread = 1;//1 - ((cyc) * (cyc));
 explode = 1;//1 + (cyc) * 10;
 spin = 1;
 materialcolor = [0,0.5,0,0.8];
@@ -239,7 +239,7 @@ rim_thickness = materialwidth,
 hub_thickness = materialwidth,
 backlash = backlash,
 bore_diameter=0,
-roundsize = 1s
+roundsize = 1
 );
 translate([0,0,-10]) scale([1,1 - 0.03,20]) motorshaft();
 }
@@ -320,6 +320,7 @@ rotate([0,0,-360 * $t * 2 * spin])
 biggear();
 
 translate([tile*-0,tile*-0,(-materialwidth * 3) * explode])
+//projection(cut=true)
 smallgear();
 
 translate([tile*-1,tile*-1,(-materialwidth * 2) * explode])
